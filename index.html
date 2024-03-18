@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confuser</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #show-box {
+            padding: 10px;
+            border: 1px solid #000;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            margin: 5rem;
+        }
+
+        .char {
+            display: inline-block;
+            width: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="text">
+    <button id="confuse">Confuse</button>
+    <button id="ohhhh">OHHHHH</button>
+    <div id="show-box"></div>
+    <script type="module">
+        import confuser from './confuser.js';
+
+        const input = document.querySelector('input');
+        const button = document.querySelector('#confuse');
+        const ohhhh = document.querySelector('#ohhhh');
+        const showBox = document.querySelector('#show-box');
+
+        button.addEventListener('click', () => {
+            clearInterval(loopId);
+            const arr = confuser(input.value)
+            showBox.innerHTML = arr.map(char => `<span class="char">${char}</span>`).join('');
+            // copy to clipboard
+            const el = document.createElement('textarea');
+            el.value = arr.join('');
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        });
+
+        let loopId;
+        ohhhh.addEventListener('click', () => {
+            clearInterval(loopId);
+            loopId = setInterval(() => {
+                showBox.innerHTML = confuser(input.value).map(char => `<span class="char">${char}</span>`).join('');
+            }, 100);
+        })
+    </script>
+</body>
+
+</html>
